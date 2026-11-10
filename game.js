@@ -1,0 +1,90 @@
+'use strict';
+const E=MatchEngine,$=id=>document.getElementById(id);
+const animals=[{name:'小红狐',color:'#f65b36',kind:'fox'},{name:'小青蛙',color:'#76d735',kind:'frog'},{name:'蓝河马',color:'#38b9ed',kind:'hippo'},{name:'小黄鸡',color:'#ffdc35',kind:'chick'},{name:'紫猫头鹰',color:'#a461da',kind:'owl'},{name:'小棕熊',color:'#be772e',kind:'bear'}];
+let animalSerial=0;
+function animal(t){
+ const kind=animals[t].kind;
+ const colors=[['#ff9864','#ed482b','#a82b20'],['#b9f75b','#58bd26','#277716'],['#84e5fc','#33a9e4','#216da9'],['#fff78a','#ffd032','#d18b16'],['#d6a1fa','#9650d1','#5d2794'],['#e8ab59','#b8732b','#774118']][t];
+ const [hi,mid,edge]=colors,id='animal-'+t+'-'+(++animalSerial);
+ const shapes={
+  chick:'M30 13C23 15 15 27 9 39C2 53 8 60 30 61C52 62 61 57 56 44C52 33 42 15 35 13Z',
+  frog:'M8 28C3 13 13 5 23 11Q31 16 41 11C52 5 62 15 56 28C67 42 56 61 33 62C10 63 -2 44 8 28Z',
+  hippo:'M13 20C7 10 12 7 18 12L23 17Q32 14 41 17L47 11C54 7 58 12 51 22Q58 34 59 49Q59 61 44 62H20Q5 62 5 50Q6 33 13 20Z',
+  bear:'M12 24C-1 19 4 6 14 9Q21 10 22 18Q32 14 42 18C45 5 59 7 59 18Q60 25 53 27C64 45 54 61 33 62C11 63 0 46 12 24Z',
+  owl:'M12 12Q17 14 23 17Q32 13 41 17Q47 14 52 12L53 29C61 51 49 63 32 63C15 63 3 51 11 29Z',
+  fox:'M8 29L7 5Q19 6 26 19Q32 17 38 19Q46 6 57 5L56 30C65 44 52 59 32 62C12 59 -1 45 8 29Z'
+ };
+ const iris=['#a85925','#548b2b','#297a9c','#9a6325','#ae7835','#73513b'][t];
+ const eye=(x,y,r=5)=>`<ellipse cx="${x}" cy="${y+.5}" rx="${r+2}" ry="${r+2.3}" fill="${edge}" opacity=".28"/><ellipse cx="${x}" cy="${y}" rx="${r+1.5}" ry="${r+1.8}" fill="url(#${id}-ivory)"/><ellipse cx="${x+.5}" cy="${y+.8}" rx="${r-1}" ry="${r+.1}" fill="${iris}"/><ellipse cx="${x+.5}" cy="${y+.4}" rx="${Math.max(1.3,r-2.2)}" ry="${r-1}" fill="#252c36"/><path d="M${x-r-1} ${y-1.6}Q${x} ${y-r-3.7} ${x+r+1} ${y-1.6}" fill="none" stroke="${edge}" stroke-width="1.2" stroke-linecap="round"/><ellipse cx="${x-1}" cy="${y-1.7}" rx="1.65" ry="1.9" fill="#fff"/><circle cx="${x+2}" cy="${y+2.6}" r=".75" fill="#d9f8ff" opacity=".9"/>`;
+ let detail='',eyes='',mouth='';
+ if(kind==='chick'){
+  detail='<path d="M29 15C24 6 29 1 34 5C39 10 33 15 33 15" fill="#ef6532" stroke="#c74c22" stroke-width="1.2"/>';
+  eyes=eye(23,35,3.1)+eye(42,35,3.1);
+  mouth='<path d="M27 42Q32 38 38 42L33 48Z" fill="#f18b20" stroke="#d47515" stroke-width="1"/>';
+ }else if(kind==='frog'){
+  detail='<path d="M13 35Q31 25 51 35Q44 40 32 40Q20 40 13 35" fill="#b2eb4d" opacity=".65"/>';
+  eyes=eye(18,21,5)+eye(46,21,5);
+  mouth='<ellipse cx="25" cy="32" rx="1" ry=".7" fill="#4d912b"/><ellipse cx="39" cy="32" rx="1" ry=".7" fill="#4d912b"/><path d="M13 37Q30 49 51 36" fill="none" stroke="#377e27" stroke-width="1.6" stroke-linecap="round"/><path d="M24 45Q32 48 40 44" fill="none" stroke="#dcff9b" stroke-opacity=".65" stroke-width="1.3" stroke-linecap="round"/>';
+ }else if(kind==='hippo'){
+  detail='<path d="M14 19L13 14 18 17M47 18L51 13 51 19" stroke="#257fb8" stroke-width="3" stroke-linecap="round"/><ellipse cx="32" cy="48" rx="25" ry="15" fill="#75cdef" opacity=".75"/><ellipse cx="19" cy="47" rx="2.2" ry="1.6" fill="#247fae"/><ellipse cx="45" cy="47" rx="2.2" ry="1.6" fill="#247fae"/>';
+  eyes=eye(21,32,5.2)+eye(43,32,5.2);
+  mouth='<path d="M25 54Q32 57 39 54" fill="none" stroke="#2478a9" stroke-width="1.5" stroke-linecap="round"/>';
+ }else if(kind==='bear'){
+  detail='<circle cx="13" cy="18" r="5" fill="#f1c17b"/><circle cx="51" cy="18" r="5" fill="#f1c17b"/><ellipse cx="32" cy="46" rx="12" ry="13" fill="#f5cb84"/>';
+  eyes=eye(22,33,3.2)+eye(43,33,3.2);
+  mouth='<ellipse cx="32" cy="42" rx="4.4" ry="3.3" fill="#633b24"/><path d="M32 44V49M26 49Q29 53 32 49Q35 53 38 49" fill="none" stroke="#754627" stroke-width="1.5" stroke-linecap="round"/>';
+ }else if(kind==='owl'){
+  detail='<path d="M11 13L22 21M53 13L42 21" stroke="#ebbcff" stroke-width="2"/><path d="M9 32Q17 22 31 30Q45 22 55 32L50 46Q41 51 32 43Q22 51 13 45Z" fill="#c18be5"/><path d="M14 25L29 29M50 25L35 29" stroke="#7131a2" stroke-width="3.5" stroke-linecap="round"/>';
+  eyes=eye(22,35,5.5)+eye(43,35,5.5);
+  detail+='<path d="M23 53L26 55M31 54L33 57M40 53L38 55" fill="none" stroke="#e3b5fb" stroke-opacity=".65" stroke-width="1.6" stroke-linecap="round"/>';
+  mouth='<path d="M28 43L36 43 32 50Z" fill="#ffb634" stroke="#d18a21" stroke-width="1"/>';
+ }else{
+  detail='<path d="M12 13L23 24 13 26M52 13L42 24 51 26" fill="#ffcfaa"/><path d="M5 40Q12 37 20 43L32 50 45 42Q52 37 59 40Q52 57 32 60Q12 57 5 40" fill="#fff1cb"/>';
+  eyes='<path d="M17 35Q22 30 27 35M38 35Q43 30 48 35" fill="none" stroke="#702d27" stroke-width="2.6" stroke-linecap="round"/>';
+  mouth='<path d="M27 45Q32 42 37 45L32 49Z" fill="#67362c"/><path d="M25 51Q32 57 39 51" fill="none" stroke="#8b4934" stroke-width="1.6" stroke-linecap="round"/>';
+ }
+ return `<svg viewBox="0 0 64 68" aria-hidden="true"><defs><linearGradient id="${id}" x1="20%" y1="0%" x2="70%" y2="100%"><stop stop-color="${hi}"/><stop offset=".42" stop-color="${mid}"/><stop offset=".78" stop-color="${mid}"/><stop offset="1" stop-color="${edge}"/></linearGradient><radialGradient id="${id}-gloss" cx="30%" cy="16%" r="83%"><stop stop-color="#fff" stop-opacity=".5"/><stop offset=".46" stop-color="#fff" stop-opacity=".08"/><stop offset="1" stop-color="${edge}" stop-opacity=".24"/></radialGradient><linearGradient id="${id}-ivory" x2=".3" y2="1"><stop stop-color="#fffef6"/><stop offset=".6" stop-color="#fff1d3"/><stop offset="1" stop-color="#e8c899"/></linearGradient><linearGradient id="${id}-nose" x2=".3" y2="1"><stop stop-color="#a07561"/><stop offset=".5" stop-color="#674437"/><stop offset="1" stop-color="#4b3332"/></linearGradient><clipPath id="${id}-clip"><path d="${shapes[kind]}"/></clipPath></defs><ellipse cx="32" cy="64" rx="22" ry="2" fill="#000" opacity=".28"/><path d="${shapes[kind]}" fill="url(#${id})" stroke="${edge}" stroke-opacity=".7" stroke-width=".85" stroke-linejoin="round"/><path d="${shapes[kind]}" fill="url(#${id}-gloss)"/><g clip-path="url(#${id}-clip)"><path d="M8 35Q4 52 22 59M54 28Q63 48 45 58" fill="none" stroke="${hi}" stroke-opacity=".42" stroke-width="1.6" stroke-linecap="round"/><ellipse cx="24" cy="19" rx="10" ry="4" fill="#fff" opacity=".13"/>${detail.replaceAll('fill="#fff1cb"',`fill="url(#${id}-ivory)"`).replaceAll('fill="#f5cb84"',`fill="url(#${id}-ivory)"`)}<path d="M14 28Q16 23 21 22" stroke="#fff" stroke-opacity=".34" stroke-width="1.8" stroke-linecap="round" fill="none"/>${eyes}${mouth.replaceAll('fill="#633b24"',`fill="url(#${id}-nose)"`).replaceAll('fill="#67362c"',`fill="url(#${id}-nose)"`)}<ellipse cx="13" cy="42" rx="3.4" ry="1.8" fill="#ffb5a0" opacity=".24"/><ellipse cx="51" cy="42" rx="3.4" ry="1.8" fill="#ffb5a0" opacity=".24"/></g></svg>`;
+}
+function toolIcon(kind){
+ const id='tool-'+kind;
+ const art={
+  hint:`<path d="M12 24C5 16 10 6 18 6S31 16 24 24L22 28H14Z" fill="url(#${id}-paint)" stroke="#b88a38" stroke-width="1.1"/><path d="M13 15Q13 10 18 10M16 21L18 24 20 21M18 24V28" fill="none" stroke="#fff8c2" stroke-width="1.6" stroke-linecap="round"/><path d="M14 28H22V32Q18 35 14 32Z" fill="#78939b"/><path d="M15 29H21M16 32H20M18 2V3M5 9L7 10M29 9L31 8M3 19H5M30 19H32" stroke="#b9a15c" stroke-width="1.4" stroke-linecap="round"/>`,
+  shuffle:`<path d="M8 13A11 11 0 0 1 27 10L30 14M30 7V14H23M28 23A11 11 0 0 1 9 27L6 23M6 30V23H13" fill="none" stroke="#397f81" stroke-width="4.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12A11 11 0 0 1 27 9L29 12M29 7V13H24M28 22A11 11 0 0 1 9 26L7 24M7 29V23H12" fill="none" stroke="url(#${id}-paint)" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/>`,
+  hammer:`<path d="M19 16L24 20 14 33Q12 35 9 32Q7 30 9 28Z" fill="url(#${id}-paint)" stroke="#875436" stroke-width="1.1"/><path d="M11 29L20 19" stroke="#fbd39b" stroke-width="1.3" stroke-linecap="round"/><g transform="rotate(35 20 12)"><rect x="8" y="5" width="23" height="13" rx="3" fill="#b7794b" stroke="#80543b" stroke-width="1.1"/><path d="M11 6H28Q30 6 30 9H9Q9 6 11 6" fill="#e8bd84"/><path d="M13 10V16M26 10V16" stroke="#945f3c" stroke-width="1.3"/><path d="M17 7H23V17H17Z" fill="#7e9c9b"/><path d="M18 8H22" stroke="#d6ece4" stroke-width="1.1"/></g>`,
+  sound:`<path d="M7 15H12L20 9V28L12 22H7Z" fill="url(#${id}-paint)" stroke="#557f87" stroke-width="1.2" stroke-linejoin="round"/><path class="sound-waves" d="M24 13Q30 18 24 24M28 9Q37 18 28 28" fill="none" stroke="#508b94" stroke-width="1.8" stroke-linecap="round"/><path class="sound-mute" d="M25 16L31 22M31 16L25 22" stroke="#9f7770" stroke-width="1.8" stroke-linecap="round"/>`
+ };
+ const palette={hint:['#fff8b5','#e9ae38'],shuffle:['#c2ece2','#6bb8ab'],hammer:['#e4b57a','#ae7047'],sound:['#e5f8f2','#8cbdc0']}[kind];
+ return `<svg viewBox="0 0 36 38" aria-hidden="true"><defs><linearGradient id="${id}-paint" x2=".3" y2="1"><stop stop-color="${palette[0]}"/><stop offset="1" stop-color="${palette[1]}"/></linearGradient></defs>${art[kind]}</svg>`;
+}
+for(const kind of ['hint','shuffle','hammer'])document.querySelector('.'+kind+'-icon').innerHTML=toolIcon(kind);
+$('sound').innerHTML=toolIcon('sound');$('sound').setAttribute('aria-pressed','false');
+$('scene-fox').innerHTML=animal(0);
+let board,score,remaining,level=1,selected=-1,busy=false,ended=false,hammer=false,counts,version=0,sound=false,audio;
+const names=['森林初遇','微风草地','花间小径','溪流漫步','落日山丘','星光营地'];
+let target=2400;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+function tone(combo=1){if(!sound)return;try{audio=audio||new (window.AudioContext||window.webkitAudioContext)();if(audio.state==='suspended')audio.resume();[0,1,2].forEach((v)=>{let o=audio.createOscillator(),g=audio.createGain(),time=audio.currentTime+v*.065;o.type='sine';o.frequency.value=440*Math.pow(1.25,v+(combo%5));g.gain.setValueAtTime(.045,time);g.gain.exponentialRampToValueAtTime(.001,time+.2);o.connect(g);g.connect(audio.destination);o.start(time);o.stop(time+.22)})}catch{}}
+function render(fresh=[]){const f=new Set(fresh);$('board').innerHTML=board.map((v,i)=>`<button class="tile${v>=6?' bomb':''}${selected===i?' selected':''}${f.has(i)?' new':''}" data-index="${i}" role="gridcell" aria-label="第${Math.floor(i/8)+1}行第${i%8+1}列 ${animals[E.type(v)].name}${v>=6?' 爆炸棋子':''}" aria-selected="${selected===i}">${animal(E.type(v))}</button>`).join('');update()}
+function update(){if(!window.ForestOnline?.active){$('player-one-score').textContent=score.toLocaleString();$('player-one-name').textContent='森林玩家';$('player-two-name').textContent='本关目标';$('player-two-score').textContent=target.toLocaleString();$('match-status').textContent='单人闯关 · 交换相邻动物，达到目标过关'}$('score').textContent=score.toLocaleString();$('moves').textContent=remaining;$('target').textContent=target.toLocaleString();if(!window.ForestOnline?.active)$('score-label').textContent=window.innerWidth<=650?'得分 / 目标 '+target.toLocaleString():'当前得分';$('progress').style.width=Math.min(100,score/target*100)+'%';[.33,.66,1].forEach((n,i)=>$('s'+(i+1)).classList.toggle('lit',score>=target*n));$('goal-check').textContent=score>=target?'✓':'○';for(const k of ['hint','shuffle','hammer']){$(k+'-count').textContent=counts[k];$(k).disabled=counts[k]===0||ended||!!window.ForestOnline?.toolsDisabled}document.body.classList.toggle('hammer-mode',hammer);$('hammer').classList.toggle('active',hammer)}
+function toast(text){$('toast').textContent=text;$('toast').classList.add('show');clearTimeout(toast.timer);toast.timer=setTimeout(()=>$('toast').classList.remove('show'),2400)}
+function start(next=1){version++;level=next;target=2400+(level-1)*850;score=0;remaining=Math.max(18,25-Math.min(level,7));counts={hint:3,shuffle:2,hammer:2};selected=-1;busy=false;ended=false;hammer=false;board=E.generate();$('level-tag').textContent='LEVEL '+String(level).padStart(2,'0');$('level-name').textContent=names[(level-1)%names.length];$('board-status').textContent='准备好了吗？快乐开始';$('combo-pill').textContent='GOOD LUCK';$('mission-text').textContent=level===1?'收集快乐，点亮第一颗星':'向着新的目标，再进一步';render()}
+function particles(cells){const host=$('particles'),size=$('board').clientWidth/8;cells.forEach(i=>{for(let k=0;k<5;k++){let p=document.createElement('i');p.className='particle';p.style.cssText=`left:${12+(i%8+.5)*size}px;top:${12+(Math.floor(i/8)+.5)*size}px;--color:${animals[E.type(board[i])].color};--dx:${(Math.random()-.5)*100}px;--dy:${(Math.random()-.7)*110}px`;host.appendChild(p);setTimeout(()=>p.remove(),700)}})}
+async function clearCells(cells,mult,keep=-1){const actual=cells.filter(i=>i!==keep);particles(actual);actual.forEach(i=>$('board').children[i]?.classList.add('pop'));score+=actual.length*60*mult;tone(mult);update();await wait(230);actual.forEach(i=>board[i]=null);if(keep>=0)board[keep]=E.type(board[keep])+6;const fresh=E.gravity(board);render(fresh);await wait(200)}
+async function resolve(first,preferred=-1){let m=first,chain=0;while(m.cells.length){chain++;let keep=-1;const long=m.runs.find(r=>r.length>=4);if(long){const k=long.includes(preferred)?preferred:long[Math.floor(long.length/2)];if(board[k]<6)keep=k}const expanded=E.expand(board,m.cells);if(expanded.some(i=>board[i]>=6))keep=-1;await clearCells(expanded,chain,keep);if(chain>1){$('combo').textContent=chain>=4?'太棒了！ ×'+chain:'快乐连消 ×'+chain;$('combo').classList.remove('show');void $('combo').offsetWidth;$('combo').classList.add('show')}$('combo-pill').textContent=chain>1?'COMBO ×'+chain:'NICE MATCH';m=E.matches(board)}if(!E.moves(board).length){board=E.generate();render();toast('没有可交换的棋子，已免费重新排列')}busy=false;$('board-status').textContent=chain>1?'一口气连消 '+chain+' 次，真漂亮':'不错，再找找下一组';finish()}
+function finish(){if(score>=target||remaining<=0){ended=true;update();setTimeout(()=>{if(!ended)return;const win=score>=target;const earned=win?(window.ForestAdventure?.record(level,score,remaining)||'★★★'):'';showModal(win?'闯关成功！':'再试一次，就差一点',win?`<div class="dialog-stars">${earned}</div>恭喜通过第 ${level} 关<br>本局得分 <b>${score.toLocaleString()}</b> · 剩余 ${remaining} 步`:`本局得分 <b>${score.toLocaleString()}</b><br>距离目标还差 ${(target-score).toLocaleString()} 分<br>试试四连消和小锤子吧`,win?'挑战下一关':'再挑战一次',()=>start(win?level+1:level),win?'✦':'✿')},450)}}
+async function exchange(a,b){if(window.ForestOnline?.active){await window.ForestOnline.move('swap',a,b);return}if(busy||ended)return;busy=true;selected=-1;E.swap(board,a,b);render();await wait(140);const m=E.matches(board);if(!m.cells.length){E.swap(board,a,b);render();$('board').classList.add('shake');setTimeout(()=>$('board').classList.remove('shake'),260);busy=false;toast('三个相同的小动物连成一线才能消除');return}remaining--;update();await resolve(m,b)}
+async function choose(i){if(busy||ended)return;if(window.ForestOnline?.active&&hammer){hammer=false;await window.ForestOnline.move('hammer',i);return}if(hammer){hammer=false;counts.hammer--;busy=true;selected=-1;const row=Math.floor(i/8),col=i%8,cells=[];for(let r=Math.max(0,row-1);r<=Math.min(7,row+1);r++)for(let c=Math.max(0,col-1);c<=Math.min(7,col+1);c++)cells.push(r*8+c);await clearCells(E.expand(board,cells),1);await resolve(E.matches(board));return}if(selected===i){selected=-1;render();return}if(selected>=0&&E.adjacent(selected,i)){await exchange(selected,i);return}selected=i;render()}
+let pointer=null,suppress=false;
+$('board').addEventListener('pointerdown',e=>{const el=e.target.closest('[data-index]');if(!el)return;pointer={i:+el.dataset.index,x:e.clientX,y:e.clientY};suppress=false});
+$('board').addEventListener('pointerup',e=>{if(!pointer)return;const p=pointer;pointer=null;const dx=e.clientX-p.x,dy=e.clientY-p.y;if(Math.max(Math.abs(dx),Math.abs(dy))>18){suppress=true;const j=p.i+(Math.abs(dx)>Math.abs(dy)?(dx>0?1:-1):(dy>0?8:-8));if(j>=0&&j<64&&E.adjacent(p.i,j))exchange(p.i,j)}});
+$('board').addEventListener('pointercancel',()=>pointer=null);
+$('board').addEventListener('click',e=>{if(suppress){suppress=false;return}const el=e.target.closest('[data-index]');if(el)choose(+el.dataset.index)});
+$('board').addEventListener('keydown',e=>{const el=e.target.closest('[data-index]');if(!el)return;const i=+el.dataset.index,d={ArrowLeft:-1,ArrowRight:1,ArrowUp:-8,ArrowDown:8}[e.key];if(d){e.preventDefault();const j=i+d;if(j>=0&&j<64&&E.adjacent(i,j))$('board').children[j].focus()}});
+$('hint').onclick=()=>{if(busy||ended||!counts.hint)return;hammer=false;selected=-1;counts.hint--;render();const pair=E.moves(board)[0];if(pair)pair.forEach(i=>$('board').children[i].classList.add('hinted'));toast('试着交换发光的两位小伙伴')};
+$('shuffle').onclick=()=>{if(window.ForestOnline?.active){window.ForestOnline.move('shuffle');return}if(busy||ended||!counts.shuffle)return;counts.shuffle--;board=E.generate();selected=-1;hammer=false;render([...Array(64).keys()]);toast('新棋盘，新惊喜！不消耗步数')};
+$('hammer').onclick=()=>{if(busy||ended||!counts.hammer)return;hammer=!hammer;selected=-1;render();if(hammer)toast('选择一个位置，敲掉周围 3 × 3 的棋子')};
+function showModal(title,body,label,action,art='✿'){$('modal-title').textContent=title;$('modal-body').innerHTML=body;$('modal-art').textContent=art;$('modal-action').textContent=label;$('modal-action').onclick=()=>{$('modal').close();action?.()};if(!$('modal').open)$('modal').showModal()}
+$('close-modal').onclick=()=>$('modal').close();$('help').onclick=()=>{if(window.ForestOnline?.active){showModal('好友联机规则','对战：共享一个棋盘，双方轮流交换，共用40个有效步数，独立计分；分高者胜。对战禁用所有道具，非法交换不换人。<br>合作：共用棋盘和 40 步，一起达到 8,000 分。<br>联机由服务端计分，连消倍率逐轮提升。<br>小锤子和洗牌不消耗步数，合作时共享次数。<br>联机使用普通动物棋子，四连直接计分。','继续游戏');return}showModal('森林里的快乐规则','交换相邻小动物，横向或纵向连成 3 个即可消除。<br>4 个及以上会留下爆炸棋子，再次消除可炸开周围。<br>掉落后继续匹配会触发连消，加分倍率逐轮提升。<br>在有限步数内达到目标，就能解锁下一关。<br>道具不消耗步数，放心试一试。','继续游戏')};
+$('restart').onclick=()=>{if(window.ForestOnline?.active){toast('联机比赛结束后，由房主开始下一局');return}if(busy)return;showModal('重新开始这一关？','本关的分数与步数将重新计算。','重新挑战',()=>start(level))};
+$('sound').onclick=()=>{sound=!sound;$('sound').classList.toggle('sound-on',sound);$('sound').setAttribute('aria-pressed',String(sound));$('sound').title=sound?'关闭音效':'打开音效';$('sound').setAttribute('aria-label',sound?'关闭音效':'打开音效');toast(sound?'音效已打开':'音效已关闭');if(sound)tone()};
+start();
